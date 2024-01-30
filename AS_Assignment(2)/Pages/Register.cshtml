@@ -1,0 +1,207 @@
+﻿@page
+@model AS_Assignment_2_.Pages.RegisterModel
+@{
+}
+
+<head runat="server">
+    <title></title>
+    <script src="https://www.google.com/recaptcha/api.js?render=6Leq9hIpAAAAAP_XY-GpUBFuIZ66OJAMu0nmh_8P"></script>
+</head>
+
+
+
+<div class="container mt-5">
+
+	<div class="row justify-content-center align-items-center">
+
+		<div class="col-sm-12 col-md-12 col-lg-4">
+			<h1 class="mb-3">Register </h1>
+
+			<form method="post" id="yourForm">
+
+				<div asp-validation-summary="All" class="text-danger"></div>
+
+               
+
+				<div class="mb-3">
+					<label class="form-label" asp-for="RModel.FirstName">First Name</label>
+					<input type="Text" asp-for="RModel.FirstName" class="form-control" />
+					<span asp-validation-for="RModel.FirstName" class="text-danger"></span>
+				</div>
+
+				<div class="mb-3">
+					<label class="form-label" asp-for="RModel.LastName">Last Name</label>
+					<input type="Text" asp-for="RModel.LastName" class="form-control" />
+					<span asp-validation-for="RModel.LastName" class="text-danger"></span>
+				</div>
+
+				<div class="mb-3">
+					<label class="form-label" asp-for="RModel.Gender">Gender</label>
+					<input type="text" asp-for="RModel.Gender" class="form-control"/>
+					<span asp-validation-for="RModel.Gender" class="text-danger"></span>
+				</div>
+
+				<div class="mb-3">
+					<label class="form-label" asp-for="RModel.NRIC">NRIC</label>
+					<input type="Text" asp-for="RModel.NRIC" class="form-control" />
+					<span asp-validation-for="RModel.NRIC" class="text-danger"></span>
+				</div>
+
+
+
+				<div class="mb-3">
+					<label class="form-label" asp-for="RModel.Email">Email Address</label>
+					<input type="email" asp-for="RModel.Email" class="form-control" />
+					<span asp-validation-for="RModel.Email" class="text-danger"></span>
+				</div>
+
+				<div class="mb-3">
+					<label class="form-label" asp-for="RModel.Password" id="lbl_pwd">Password</label>
+					<input type="password" asp-for="RModel.Password" class="form-control" id="tb_pwd"/>
+                    <label class="form-label"  id="lbl_pwdchecker"></label>
+					<span asp-validation-for="RModel.Password" class="text-danger"></span>
+				</div>
+
+				@section scripts {
+					<script>
+                        // Get the element by ID using JavaScript
+                        var passwordInput = document.getElementById('tb_pwd');
+                        var passwordChecker = document.getElementById('lbl_pwdchecker');
+
+                        // You can now manipulate the element using JavaScript
+                        if (passwordInput) {
+                            passwordInput.addEventListener('input', function () {
+                                checkPasswordStrength(passwordInput.value);
+                            });
+                        }
+
+                        function onRecaptchaSubmit(token) {
+                            // This function will be called when reCAPTCHA is verified.
+                            // You can include additional logic here, or proceed with form submission.
+                            document.getElementById("yourForm").submit();
+                        }
+
+                        function checkPasswordStrength(password) {
+                            var scores = checkPassword(password);
+                            var status = "";
+
+                            switch (scores) {
+                                case 0:
+                                    status = "Password must have a minimum of 12 characters, lowercase, uppercase, numbers, and special characters";
+                                    break;
+                                case 1:
+                                    status = "Very Weak";
+                                    break;
+                                case 2:
+                                    status = "Weak";
+                                    break;
+                                case 3:
+                                    status = "Medium";
+                                    break;
+                                case 4:
+                                    status = "Strong";
+                                    break;
+                                case 5:
+                                    status = "Very Strong";
+                                    break;
+                                default:
+                                    break;
+                            }
+
+                            passwordChecker.innerHTML = "Status: " + status;
+
+                            if (scores == 0) {
+                                passwordChecker.style.color = 'red';
+                                return;
+                            }
+
+                            if (scores < 4) {
+                                passwordChecker.style.color = 'red';
+                                return;
+                            }
+
+                            passwordChecker.style.color = 'green';
+                        }
+
+                        function checkPassword(password) {
+                            var score = 0;
+
+                            // implement validation here
+
+                            // Score 0 very weak
+                            // if length of password is less than 12 chars
+                            if (password.length < 12) {
+                                return 0;
+                            } else {
+                                score = 1;
+                            }
+
+                            // Score 2 weak
+                            if (/[a-z]/.test(password)) {
+                                score++;
+                            }
+
+                            // Score 3 medium
+                            if (/[A-Z]/.test(password)) {
+                                score++;
+                            }
+
+                            // Score 4 strong
+                            if (/\d/.test(password)) {
+                                score++;
+                            }
+
+                            if (/[$&+,:;=?#|'<>.-^*()%!]/.test(password)) {
+                                score++;
+                            }
+
+                            return score;
+                        }
+
+                        grecaptcha.ready(function () {
+                            grecaptcha.execute('6Leq9hIpAAAAAP_XY-GpUBFuIZ66OJAMu0nmh_8P', { action: 'Register' }).then(function (token) {
+                                document.getElementById("g-recaptcha-response").value = token;
+                            });
+                        });
+
+                                              
+					</script>
+				}
+
+				<div class="mb-3">
+					<label class="form-label" asp-for="RModel.ConfirmPassword">Confirm Password</label>
+					<input type="password" asp-for="RModel.ConfirmPassword" class="form-control" />
+					<span asp-validation-for="RModel.ConfirmPassword" class="text-danger"></span>
+				</div>
+
+				<div class="mb-3">
+					<label class="form-label" asp-for="RModel.DateofBirth">Date of Birth</label>
+					<input type="date" asp-for="RModel.DateofBirth" class="form-control" />
+					<span asp-validation-for="RModel.DateofBirth" class="text-danger"></span>
+				</div>
+
+				<div class="mb-3">
+					<label class="form-label" asp-for="RModel.Resume">Resume</label>
+					<input type="file" asp-for="RModel.Resume" class="form-control" />
+					<span asp-validation-for="RModel.Resume" class="text-danger"></span>
+				</div>
+
+				<div class="mb-3">
+					<label class="form-label" asp-for="RModel.WhoAmI">Who Am I</label>
+					<input type="Text" asp-for="RModel.WhoAmI" class="form-control" />
+					<span asp-validation-for="RModel.WhoAmI" class="text-danger"></span>
+				</div>
+
+                
+                <input type="hidden" id="g-recaptcha-response" name="g-recaptcha-response" />
+
+				<div class="mb-3">
+					<button type="submit" class="btn btn-primary">Register</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+
+
